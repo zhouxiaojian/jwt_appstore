@@ -46,7 +46,7 @@ public class ButtonBinder extends Adapters.CursorBinder {
             mBtn.setTag(myObserver);
             mBtn.setOnClickListener(new OnClickListener() {
 
-                @Override
+                //@Override
                 public void onClick(View v) {
                     switch (mStatusType) {
                     case Constant.STATUS_INSTALLED:
@@ -104,7 +104,7 @@ class MyObserver implements IDownloadObserver {
         updateBtn();
     }
 
-    @Override
+    //@Override
     public void setProgressValue(int value) {
         // TODO Auto-generated method stub
         myBtn.setText(value + "%");

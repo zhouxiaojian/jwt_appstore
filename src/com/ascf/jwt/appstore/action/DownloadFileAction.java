@@ -31,7 +31,7 @@ public class DownloadFileAction implements IClickBtnAction {
         this.mCtx = ctx;
     }
 
-    @Override
+    //@Override
     public void doit() {
         // TODO Auto-generated method stub
         DownloadOneAppTask task = new DownloadOneAppTask(mCtx, mCallBack);

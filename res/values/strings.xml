@@ -19,8 +19,11 @@
     <string name="contacts_list_activity">Xml Contacts Adapter</string>
     <string name="photos_list_activity">Xml Photos Adapter</string>
     <string name="rss_reader_activity">APP STORE</string>
-    <string name="no_contacts">No contacts available</string>
-    <string name="no_photos">Loading photos...</string>
     <string name="no_rss_feed">Loading APP Data...</string>
     <string name="status">status</string>
+    <string name="system_instruction">App Store Login</string>
+    <string name="account_name">Account:</string>
+    <string name="account_pwd">Password:</string>
+    <string name="done_action">Done</string>
+    <string name="cancel_action">Cancel</string>
 </resources>

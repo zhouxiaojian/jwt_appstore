@@ -4,6 +4,9 @@ import android.os.Environment;
 
 public class Constant {
 
+	public final static String DEFAULT_IP = "10.0.12.1";
+	public final static String DEFAULT_PORT = "80";
+
     /** installed, don't need to update. */
     public final static int STATUS_INSTALLED = 1;
 
@@ -54,6 +57,16 @@ public class Constant {
     public static final String DOWNLOAD_FILEINFO_SAVER =  DOWNLOAD_HOME + "/breakfile.txt";
     public static final String DOWNLOAD_FILE_DIR = DOWNLOAD_HOME + "/apps/";
     public static final String APK_SUFFIX = ".apk";
+
+    
+    /** for Account xml JSON**/
+
+	public static final String KEY_ACCOUNT_NAME = "name";
+	public static final String KEY_ACCOUNT_PWD = "pwd";
+	public static final String KEY_ACCOUNT_LEVEL = "level";
+	public static final String KEY_ACCOUNT_APPLIST = "applist";
+
+	public static final int USER_CHECK_NOPASS = -1;
 
     private Constant(){
         

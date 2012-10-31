@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 
 public class InstallAction implements IClickBtnAction {
 
-    @Override
+
     public void doit() {
         // TODO Auto-generated method stub
         

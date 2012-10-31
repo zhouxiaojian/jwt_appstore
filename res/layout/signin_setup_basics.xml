@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+             <TextView
+                android:id="@+id/instructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:textSize="20sp"
+                android:text="@string/system_instruction"
+                android:textColor="?android:attr/textColorPrimary" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="6sp"
+                android:layout_height="0dip"
+                android:layout_weight="1" />
+	        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		                    android:layout_width="fill_parent" 
+		                    android:layout_height="fill_parent">
+
+			    <TextView android:id="@+id/label_account"
+			              android:textStyle="bold"
+                          android:layout_width="wrap_content" 
+                          android:layout_height="wrap_content"
+
+                          android:textSize="20sp"
+                          android:layout_marginTop="4sp"
+                          android:text="@string/account_name"/>
+                <EditText
+                        android:id="@+id/account_name"
+                        android:inputType="textEmailAddress"
+                        android:imeOptions="actionNext"
+                        android:layout_below="@id/label_account"
+                        android:textSize="20sp"
+                        android:layout_marginTop="4sp"
+                        android:text="admin"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent" />
+	           <!-- Spinner android:id="@+id/account_name" 
+	                    style="?android:attr/textAppearanceMedium"
+		                android:layout_width="match_parent" 
+		                android:layout_height="wrap_content"
+		                android:textSize="20sp"
+                        android:layout_marginTop="4sp"
+                        android:layout_below="@id/label_account"
+		                android:layout_gravity="center_vertical"
+		                android:entries="@array/account_list_label" / -->     
+                        
+                        
+                 <TextView android:id="@+id/label_password"
+                          android:textStyle="bold"
+                          android:textSize="20sp"
+                          android:layout_marginTop="4sp"
+                          android:layout_width="wrap_content" 
+                          android:layout_height="wrap_content"
+                          android:layout_below="@id/account_name"
+                          android:text="@string/account_pwd"/>
+                 <EditText
+                        android:id="@+id/account_password"
+                        android:inputType="textPassword"
+                        android:textSize="20sp"
+                         android:text="888888"
+                        android:layout_marginTop="4sp"
+                        android:layout_below="@id/label_password"
+                        android:imeOptions="actionDone"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:nextFocusDown="@+id/login" />
+                <Button
+                        android:id="@+id/login"
+                        android:text="@string/done_action"
+                        android:layout_height="wrap_content"
+                        android:layout_width="100dip"
+                        android:minWidth="10dip"
+                        android:layout_weight="1"
+                        android:layout_below="@id/account_password"
+                        android:layout_alignParentRight="true" /><!-- android:layout_gravity="center" --><!-- android:layout_gravity="center" -->
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/account_password"
+                    android:layout_centerHorizontal="true"
+                    android:layout_weight="1"
+                    android:minWidth="10dip"
+                    android:text="@string/cancel_action" />
+
+            </RelativeLayout>>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

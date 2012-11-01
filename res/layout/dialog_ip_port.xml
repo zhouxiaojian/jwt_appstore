@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/body"
+              android:orientation="vertical" >
+
+  <TextView android:id="@+id/server_ip_intro"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:text="@string/server_ip_addr"
+            android:textColor="#fff"
+            android:gravity="left"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+  <EditText android:id="@+id/server_ip_text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip"
+            android:scrollHorizontally="true"
+            android:autoText="false"
+            android:capitalize="none"
+            android:gravity="fill_horizontal"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+ <TextView android:id="@+id/server_port_intro"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:text="@string/server_port"
+            android:textColor="#fff"
+            android:gravity="left"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+  <EditText android:id="@+id/server_port_text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="10dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:scrollHorizontally="true"
+            android:autoText="false"
+            android:capitalize="none"
+            android:gravity="fill_horizontal"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+  
+</LinearLayout>

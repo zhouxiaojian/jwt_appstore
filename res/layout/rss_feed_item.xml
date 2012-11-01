@@ -25,6 +25,7 @@
   <ImageView android:id="@+id/image"
              android:layout_width="50dp"
              android:layout_height="50dp"
+             android:paddingTop="10dp"
              android:layout_alignParentTop="true"
              android:gravity="center_vertical" />
 

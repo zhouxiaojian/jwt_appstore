@@ -1,8 +1,14 @@
 package com.ascf.jwt.appstore.dirparser;
 
-public class Item {
+import java.io.Serializable;
 
-    private int mId = 0;
+public class Item implements Serializable {
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -721929122496671721L;
+	private int mId = 0;
     private String mDisplayname = "";
     private String mHttpUrl = "";
     private boolean mIsEnable = false;

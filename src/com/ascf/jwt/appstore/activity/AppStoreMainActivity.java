@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.ascf.jwt.appstore;
-
-import com.ascf.jwt.appstore.R;
+package com.ascf.jwt.appstore.activity;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.AdapterView.OnItemClickListener;
+
+import com.ascf.jwt.appstore.Adapters;
+import com.ascf.jwt.appstore.R;
+import com.ascf.jwt.appstore.UrlIntentListener;
+import com.ascf.jwt.appstore.XmlDocumentProvider;
 
 /**
  * This example demonstrate the creation of a simple RSS feed reader using the XML adapter syntax.
@@ -30,15 +35,20 @@ import android.widget.AdapterView.OnItemClickListener;
  * browser on the associated news item page.
  */
 public class AppStoreMainActivity extends ListActivity {
-    private static final String FEED_URI = "http://10.186.0.239/config_server.xml";
+    //private static final String FEED_URI = "http://10.186.0.239/config_server.xml";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent i = getIntent();
+        String url = i.getStringExtra("url");
+        String title = i.getStringExtra("title");
+        this.setTitle(title);
+        Log.i("AppStoreMainActivity", "enter into url:");
         setContentView(R.layout.rss_feeds_list);
         setListAdapter(Adapters.loadCursorAdapter(this, R.xml.rss_feed,
-                "content://xmldocument/?url=" + Uri.encode(FEED_URI)));
+                "content://xmldocument/?url=" + Uri.encode(url)));
 
         getListView().setOnItemClickListener(new UrlIntentListener());
     }

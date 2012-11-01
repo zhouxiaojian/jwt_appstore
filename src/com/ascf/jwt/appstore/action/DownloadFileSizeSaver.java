@@ -38,10 +38,20 @@ public class DownloadFileSizeSaver {
         load();
     }
 
-    public static int checkDownloadFileSize(){
-        // TODO check if downloaded file size equals identified size
-        return 0;
+    /**
+     * 防止进程意外终止，写入文件的实际大小和记录的大小不一致
+     * @param appname
+     * @param realsize
+     * @return
+     */
+    public synchronized void checkDownloadFileSize(String appname, long realsize) {
+        // check if downloaded file size equals identified size
+        long markSize = getInstance().getDownloadProgressSize(appname);
+        if (markSize > 0 && markSize != realsize) {
+            getInstance().putDownloadProgressSize(appname, realsize);
+        }
     }
+
     /**
      * 保存已下载文件大小信息到 JSONArray
      * @param appname

@@ -110,22 +110,23 @@ public class AppInfoManager {
         return result;
     }
 
-    public static String type2String(int type){
+    public static String type2String(Context ctx, int type){
         String resultT = "";
-        
         switch (type){
-        case Constant.STATUS_DOWNLOADED_UNCOMPLETED:
         case Constant.STATUS_NOTDOWNLOAD:
-            resultT = "download";
+            resultT = ctx.getResources().getString(R.string.status_download);
             break;
         case Constant.STATUS_INSTALLED:
-            resultT = "installed";
+            resultT = ctx.getResources().getString(R.string.status_installed);
             break;
         case Constant.STATUS_NEEDUPDATE:
-            resultT = "update";
+            resultT = ctx.getResources().getString(R.string.status_update);
             break;
+        case Constant.STATUS_DOWNLOADED_UNCOMPLETED:
+        case Constant.STATUS_DOWNLOAD_PAUSE:
+            resultT = ctx.getResources().getString(R.string.status_pause);
         case Constant.STATUS_UNINSTALLED:
-            resultT = "not installed";
+            resultT = ctx.getResources().getString(R.string.status_notinstall);
             break;
         }
         return resultT;

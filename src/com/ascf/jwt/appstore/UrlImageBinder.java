@@ -41,7 +41,11 @@ public class UrlImageBinder extends Adapters.CursorBinder {
     @Override
     public boolean bind(View view, Cursor cursor, int columnIndex) {
         if (view instanceof ImageView) {
-            final String url = mTransformation.transform(cursor, columnIndex);
+            String url = mTransformation.transform(cursor, columnIndex);
+            url = url.replace(Constant.KEY_IP,
+                    Utils.getServerInfo(mContext, Constant.KEY_IP)).replace(
+                    Constant.KEY_PORT,
+                    Utils.getServerInfo(mContext, Constant.KEY_PORT));
             int indx = cursor.getColumnIndex(Constant.COLUMNS_PKGNAME);
             String pkgNm = cursor.getString(indx);
             AppInfoManager.getInstance().setContext(mContext);

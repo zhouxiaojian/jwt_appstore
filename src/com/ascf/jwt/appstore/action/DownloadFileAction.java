@@ -23,6 +23,7 @@ public class DownloadFileAction implements IClickBtnAction {
     private String mUrl = "";
     private IDownloadObserver mCallBack;
     private Context mCtx;
+    private DownloadOneAppTask mDownloadTask;
 
     public DownloadFileAction(Context ctx, String appname, String url, IDownloadObserver callback){
         this.mAppname = appname;
@@ -34,8 +35,14 @@ public class DownloadFileAction implements IClickBtnAction {
     //@Override
     public void doit() {
         // TODO Auto-generated method stub
-        DownloadOneAppTask task = new DownloadOneAppTask(mCtx, mCallBack);
-        task.execute(mAppname, mUrl);
+        mDownloadTask = new DownloadOneAppTask(mCtx, mCallBack);
+        mDownloadTask.execute(mAppname, mUrl);
+    }
+
+    public boolean cancelit() {
+        // TODO Auto-generated method stub
+        mDownloadTask.stop(true);
+        return true;
     }
 }
 
@@ -43,14 +50,15 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
 
     private IDownloadObserver callbk = null;
     private Context mCtx = null;
+    private boolean forceStop = false;
+
     public DownloadOneAppTask(Context ctx, IDownloadObserver c) {
         this.callbk = c;
         this.mCtx = ctx;
     }
 
-    @Override
-    protected void onPreExecute(){
-        
+    public void stop(boolean stop){
+        this.forceStop = stop;
     }
 
     @Override
@@ -84,9 +92,9 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
                 boolean tf = file.createNewFile();
                 Log.i("", "Create new file:" + tf);
             }else {
-                skipSize = DownloadFileSizeSaver.getInstance().getDownloadProgressSize(appname);
                 realSize = file.length();
-                // DownloadFileSizeSaver.checkDownloadFileSize();
+                DownloadFileSizeSaver.getInstance().checkDownloadFileSize(appname, realSize);
+                skipSize = DownloadFileSizeSaver.getInstance().getDownloadProgressSize(appname);
             }
 
             // Constructs a new BufferedOutputStream, providing out with size bytes of buffer.
@@ -95,7 +103,7 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
 
             Log.i(DownloadFileAction.TAG, "total size:" + totalC);
             istream.skip(skipSize);
-            while (true) {
+            while (!forceStop) {
                 int i = istream.read(buffer);
                 if (i == -1) {
                     DownloadFileSizeSaver.getInstance().delete(appname);
@@ -107,12 +115,13 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
                 DownloadFileSizeSaver.getInstance().putDownloadProgressSize(appname, realSize);
                 int per = (int)((float)realSize/totalC * 100);
 
-                Log.i(DownloadFileAction.TAG, "downloaded size=" + realSize + ", downloaded percent:" + per);
-                if (!isCancelled()) {
-                    publishProgress(per);
-                }
+//                Log.i(DownloadFileAction.TAG, "downloaded size=" + realSize + ", downloaded percent:" + per);
+
+                publishProgress(per);
+
             }
             output.flush();
+            Log.i(DownloadFileAction.TAG, "file size=" + file.length() + ", saver size:" + realSize);
         } catch (IOException e) {
             Log.e(DownloadFileAction.TAG, "download file IO ERROR", e);
         }finally {
@@ -131,22 +140,24 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-
         //update UI Progress bar
-        Log.i(DownloadFileAction.TAG, " post progress value:" + values[0]);
+        //Log.i(DownloadFileAction.TAG, " post progress value:" + values[0]);
         this.callbk.setProgressValue(values[0]);
     }
 
     @Override
     protected void onPostExecute(String result) {
-        Log.i("start install apk", ":" + result);
-        installApk(result);
+        if (!forceStop){
+            Log.i("start install apk", ":" + result);
+            installApk(result);
+        }
     }
 
     private void installApk(String filepath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(new File(filepath)),
                 "application/vnd.android.package-archive");
+        
         mCtx.startActivity(intent);
     }
 

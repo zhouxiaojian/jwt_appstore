@@ -6,10 +6,14 @@ import android.os.AsyncTask;
 
 public class InstallAction implements IClickBtnAction {
 
-
     public void doit() {
         // TODO Auto-generated method stub
         
+    }
+
+    public boolean cancelit() {
+        // TODO Auto-generated method stub
+        return true;
     }
 
 }

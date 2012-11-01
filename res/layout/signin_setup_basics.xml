@@ -3,6 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/body"
     android:fillViewport="true">
 
     <LinearLayout
@@ -47,7 +48,7 @@
                         android:layout_below="@id/label_account"
                         android:textSize="20sp"
                         android:layout_marginTop="4sp"
-                        android:text="admin"
+                        android:text="boss"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent" />
 	           <!-- Spinner android:id="@+id/account_name" 
@@ -73,7 +74,7 @@
                         android:id="@+id/account_password"
                         android:inputType="textPassword"
                         android:textSize="20sp"
-                         android:text="888888"
+                         android:text="123456"
                         android:layout_marginTop="4sp"
                         android:layout_below="@id/label_password"
                         android:imeOptions="actionDone"

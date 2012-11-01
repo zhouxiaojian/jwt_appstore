@@ -17,7 +17,6 @@ import com.ascf.jwt.appstore.appmng.AppInfoManager;
 
 public class ButtonBinder extends Adapters.CursorBinder {
 
-  
     public ButtonBinder(Context context, Adapters.CursorTransformation transformation) {
         super(context, transformation);
         Log.i("JIBANGGUO:ButtonBinder:", "created...");
@@ -29,10 +28,14 @@ public class ButtonBinder extends Adapters.CursorBinder {
             final Button mBtn = (Button) view;
             Map<String, String> mMap = new HashMap<String, String>();
             //final String url = mTransformation.transform(cursor, columnIndex);
-            final String appNm = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_APPNAME));
-            final String apkUrl = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_APKURL));
-            final String pkgNm = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_PKGNAME));
-            final String versionC = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_VERSION));
+            String appNm = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_APPNAME));
+            String apkUrl = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_APKURL));
+            apkUrl = apkUrl.replace(Constant.KEY_IP,
+                    Utils.getServerInfo(mContext, Constant.KEY_IP)).replace(
+                    Constant.KEY_PORT,
+                    Utils.getServerInfo(mContext, Constant.KEY_PORT));
+            String pkgNm = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_PKGNAME));
+            String versionC = cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_VERSION));
             Log.i("ButtonBinder", "appname:" + appNm + ",package name:" + pkgNm + ",apkURL:" + apkUrl + ", version code:" + versionC);
             mMap.put(Constant.COLUMNS_APPNAME, appNm);
             mMap.put(Constant.COLUMNS_APKURL, apkUrl);
@@ -40,33 +43,45 @@ public class ButtonBinder extends Adapters.CursorBinder {
             AppInfoManager mng = AppInfoManager.getInstance();
             mng.setContext(this.mContext);
             final int mStatusType = mng.queryAppStatus(appNm, pkgNm, Integer.parseInt(versionC));
-            final MyObserver myObserver = new MyObserver(mBtn, mStatusType);
+            MyObserver myObserver = new MyObserver(mContext, mBtn, mStatusType);
             myObserver.setData(mMap);
 
             mBtn.setTag(myObserver);
             mBtn.setOnClickListener(new OnClickListener() {
-
+                protected IClickBtnAction mdownload;
+                protected MyObserver mObserv;
                 //@Override
                 public void onClick(View v) {
-                    switch (mStatusType) {
+                    mObserv = (MyObserver) mBtn.getTag();
+                    switch (mObserv.getStatusType()) {
                     case Constant.STATUS_INSTALLED:
                         break;
                     case Constant.STATUS_DOWNLOAD_DOWNLOADING:
-                        // TODO pause
+                        // TODO pause to dowoload
+                        try {
+                            if (mdownload != null && mdownload.cancelit()) {
+                                Log.i("JIBANGGUO:Pause download", " successfully.");
+                                mObserv.setStsType(Constant.STATUS_DOWNLOAD_PAUSE);
+                                mObserv.updateBtn();
+                            }
+                        }catch (Exception e){
+                            Log.e("JIBANGGUO:Pause download", " error.", e);
+                        }
+                        
                         break;
-                    case Constant.STATUS_NEEDUPDATE:
-                    case Constant.STATUS_NOTDOWNLOAD:
-                    case Constant.STATUS_DOWNLOADED_UNCOMPLETED:
-                        MyObserver observ = (MyObserver) mBtn.getTag();
-                        Map<String, String> map = observ.getData();
+                   case Constant.STATUS_NEEDUPDATE:
+                   case Constant.STATUS_NOTDOWNLOAD:
+                   case Constant.STATUS_DOWNLOAD_PAUSE:
+                   case Constant.STATUS_DOWNLOADED_UNCOMPLETED:
+                        Map<String, String> map = mObserv.getData();
                         // start download...
                         String appname = map.get(Constant.COLUMNS_APPNAME);
                         String urlpath = map.get(Constant.COLUMNS_APKURL);
                         Log.i("JIBANGGUO:click URL:", map.get(Constant.COLUMNS_APKURL) + ",app_name=" + appname + ",urlpath=" + urlpath);
-                        IClickBtnAction download = new DownloadFileAction(mContext, appname, urlpath, myObserver);
-                        download.doit();
+                        mdownload = new DownloadFileAction(mContext, appname, urlpath, mObserv);
+                        mdownload.doit();
                         break;
-                    case Constant.STATUS_UNINSTALLED:
+                   case Constant.STATUS_UNINSTALLED:
 
                         break;
                     }
@@ -80,13 +95,19 @@ public class ButtonBinder extends Adapters.CursorBinder {
 
 class MyObserver implements IDownloadObserver {
     private Button myBtn;
+    private Context mCtx;
     private int myStatus = Constant.STATUS_UNKNOWN;
     private Map<String, String> myData;
+
     public void setStsType(int type) {
         this.myStatus = type;
     }
 
-    public void setData(Map<String, String> map){
+    public int getStatusType() {
+        return myStatus;
+    }
+
+    public void setData(Map<String, String> map) {
         this.myData = map;
     }
 
@@ -94,29 +115,30 @@ class MyObserver implements IDownloadObserver {
         this.myBtn = btn;
     }
 
-    public Map<String, String> getData(){
+    public Map<String, String> getData() {
         return this.myData;
     }
 
-    public MyObserver(Button btn, int type) {
+    public MyObserver(Context ctx, Button btn, int type) {
         this.myBtn = btn;
+        this.mCtx = ctx;
         this.myStatus = type;
         updateBtn();
     }
 
-    //@Override
+    // @Override
     public void setProgressValue(int value) {
         // TODO Auto-generated method stub
         myBtn.setText(value + "%");
+        myStatus = Constant.STATUS_DOWNLOAD_DOWNLOADING;
         if (value == 100) {
             myStatus = Constant.STATUS_UNINSTALLED;
             updateBtn();
         }
-        Log.i("ButtonBinder", "downloaded " + value + "%");
-
+        //Log.i("ButtonBinder", "downloaded " + value + "%");
     }
 
-    private void updateBtn() {
-        myBtn.setText(AppInfoManager.type2String(myStatus));
+    public void updateBtn() {
+        myBtn.setText(AppInfoManager.type2String(mCtx, myStatus));
     }
 }

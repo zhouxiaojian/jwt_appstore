@@ -8,4 +8,6 @@ package com.ascf.jwt.appstore.action;
 public interface IClickBtnAction {
 
     void doit();
+
+    boolean cancelit();
 }

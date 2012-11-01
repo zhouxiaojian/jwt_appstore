@@ -1,40 +1,34 @@
 package com.ascf.jwt.appstore.dirparser;
 
 import java.util.Map;
-import java.util.Set;
-
-import com.ascf.jwt.appstore.Constant;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.ascf.jwt.appstore.Constant;
+
 public class ServiceForAccount {
 
-	public final static String KEY_IP = "ip";
-	public final static String KEY_PORT = "port";
-	public final static String KEY_USERNAME = "username";
-	public final static String KEY_PASSWORD = "password";
+	private static SharedPreferences mSharedPre = null;
 
-	private SharedPreferences mSharedPre = null;
+	private static ServiceForAccount service = new ServiceForAccount();
 
-	public ServiceForAccount(Context context) {
-		mSharedPre = PreferenceManager.getDefaultSharedPreferences(context);
+	public static ServiceForAccount getIntance(){
+	    return service;
+	}
+
+	public void setContext(Context ctx){
+	    if (mSharedPre == null){
+	        mSharedPre = PreferenceManager.getDefaultSharedPreferences(ctx);
+	    }
+	}
+	private ServiceForAccount() {
+		
 	}
 
 	public Map<String, ?> getAllAccount() {
 		return mSharedPre.getAll();
-	}
-
-	public void saveAllAccount(Map<String, ?> map) {
-		SharedPreferences.Editor editor = mSharedPre.edit();
-		Set keySet = map.keySet();
-		String[] keys = (String[]) keySet.toArray(new String[0]);
-	}
-
-	public void saveAcount(String username, String pwd) {
-		SharedPreferences.Editor editor = mSharedPre.edit();
-		editor.putString(username, pwd);
 	}
 
 	public boolean saveKeyValue(String key, String value) {
@@ -48,10 +42,10 @@ public class ServiceForAccount {
 	}
 
 	public String getServerIP() {
-		return mSharedPre.getString(KEY_IP, Constant.DEFAULT_IP);
+		return mSharedPre.getString(Constant.KEY_IP, Constant.DEFAULT_IP);
 	}
 
 	public String getServerPort() {
-		return mSharedPre.getString(KEY_PORT, Constant.DEFAULT_PORT);
+		return mSharedPre.getString(Constant.KEY_PORT, Constant.DEFAULT_PORT);
 	}
 }

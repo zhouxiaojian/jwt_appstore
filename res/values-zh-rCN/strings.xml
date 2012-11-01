@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASI
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">警务应用市场</string>
+    <string name="rss_reader_activity">上海市警务应用市场</string>
+    <string name="status">状态</string>
+    <string name="system_instruction">警务人员登陆系统，提供最新应用程序下载和安装</string>
+    <string name="account_name">用户名:</string>
+    <string name="account_pwd">密码:</string>
+    <string name="done_action">确认</string>
+    <string name="cancel_action">取消</string>
+    <string name="check_user">正在验证用户...</string>
+    <string name="load_app_data">加载应用程序...</string>
+    <string name="check_user_fail">Check User Fail</string>
+    <string name="load_app_fail">加载失败</string>
+    <string name="server_ip_addr">服务器地址:</string>
+    <string name="server_port">服务器端口:</string>
+    <string name="set_server_ip_port">服务器设置</string>
+    <string name="server_setting">服务器设置</string>
+    <string name="user_login">警务人员登录</string>
+    <string name="check_user_rights">验证用户权限</string>
+    <string name="user_directory">警务应用程序目录</string>
+    <string name="status_download">下载</string>
+    <string name="status_installed">已安装</string>
+    <string name="status_update">升级</string>
+    <string name="status_notinstall">未安装</string>
+    <string name="status_pause">暂停</string>
+    
+
+</resources>

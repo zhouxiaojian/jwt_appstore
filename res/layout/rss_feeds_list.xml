@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_rss_feed"
+        android:text="@string/load_app_data"
         android:visibility="gone" />
 
 </merge>

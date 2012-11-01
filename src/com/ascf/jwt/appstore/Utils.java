@@ -11,16 +11,30 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
+import android.content.Context;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
+
+import com.ascf.jwt.appstore.dirparser.ServiceForAccount;
 
 public class Utils {
 
     private static final int IO_BUFFER_SIZE = 4 * 1024;
     private static final String LOG_TAG = "Utils";
-    
+
     private Utils(){
         
+    }
+
+    public static String getServerInfo(Context ctx, String tag){
+        ServiceForAccount act = ServiceForAccount.getIntance();
+        act.setContext(ctx);
+        if (Constant.KEY_IP.equals(tag)){
+            return act.getServerIP();
+        }else if (Constant.KEY_PORT.equals(tag)){
+            return act.getServerPort();
+        }
+        return "";
     }
 
     public static InputStream getInputStreamFromServer(String url) {
@@ -36,17 +50,19 @@ public class Utils {
                 return null;
             }
             final HttpEntity entity = response.getEntity();
+            if (client != null) client.close();
             if (entity != null) {
                 return entity.getContent();
             }
         } catch (IOException e) {
+            if (client != null) client.close();
             Log.e(LOG_TAG + "getInputStreamFromServer", " fail.");
         }
         return null;
     }
 
     public static byte[] downloadFromServer2Buffer(String url){
-        final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+        AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         HttpGet getRequest = null;
         ByteArrayOutputStream dataStream = null;
         try {

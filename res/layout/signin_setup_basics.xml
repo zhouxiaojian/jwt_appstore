@@ -48,7 +48,6 @@
                         android:layout_below="@id/label_account"
                         android:textSize="20sp"
                         android:layout_marginTop="4sp"
-                        android:text="boss"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent" />
 	           <!-- Spinner android:id="@+id/account_name" 
@@ -60,8 +59,8 @@
                         android:layout_below="@id/label_account"
 		                android:layout_gravity="center_vertical"
 		                android:entries="@array/account_list_label" / -->     
-                        
-                        
+ 
+ 
                  <TextView android:id="@+id/label_password"
                           android:textStyle="bold"
                           android:textSize="20sp"
@@ -74,7 +73,6 @@
                         android:id="@+id/account_password"
                         android:inputType="textPassword"
                         android:textSize="20sp"
-                         android:text="123456"
                         android:layout_marginTop="4sp"
                         android:layout_below="@id/label_password"
                         android:imeOptions="actionDone"

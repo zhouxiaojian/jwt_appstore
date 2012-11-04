@@ -47,12 +47,6 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         mCancleBtn.setOnClickListener(this);
     }
 
-    /*
-     * mPassword.setInputType( InputType.TYPE_CLASS_TEXT | (((CheckBox)
-     * view).isChecked() ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-     * InputType.TYPE_TEXT_VARIATION_PASSWORD));
-     */
-
     private void saveValue(String user, String pwd) {
         ServiceForAccount.getIntance().setContext(this);
         ServiceForAccount.getIntance().saveKeyValue(Constant.KEY_USERNAME, user);
@@ -61,7 +55,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onResume() {
-        restoreValue();
+        //restoreValue();
         super.onResume();
     }
 
@@ -77,7 +71,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    // @Override
+    //@Override
     public void onClick(View v) {
         switch (v.getId()) {
         case OK_BUTTON: {
@@ -87,8 +81,8 @@ public class SignInActivity extends Activity implements View.OnClickListener {
             i.putExtra(Constant.KEY_USERNAME, accname);
             i.putExtra(Constant.KEY_PASSWORD, pwd);
             saveValue(accname, pwd);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+//          i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+//                    | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
             this.startActivityForResult(i, 0);
         }
             break;
@@ -98,16 +92,6 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    //
-    // private void getResourceList() {
-    // Log.d(TAG, "start request resource list.");
-    // Intent intent = new Intent(this, GeoloAppService.class);
-    // Bundle extras = new Bundle();
-    // extras.putInt(GeoloAppService.OPCODE, GeoloAppService.OP_GETLIST_REQ);
-    // extras.putInt("state", GEItemView.STATE_MAIN);
-    // intent.putExtras(extras);
-    // startService(intent);
-    // }
 
     @Override
     public void onStop() {
@@ -144,7 +128,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         }else {
             Toast.makeText(this, R.string.check_user_fail, Toast.LENGTH_LONG);
         }
-        
+
     }
 
     @Override

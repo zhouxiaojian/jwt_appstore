@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -946,7 +947,14 @@ public class Adapters {
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             View ret = mFactory.inflate(R.layout.rss_feed_item, parent, false);
             if (cursor != null && cursor.getCount()>0){
-                Log.i("JIBANGGUO:app_id:", cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_APPID)));
+                Log.i("JIBANGGUO:app_id:", cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_PKGNAME)));
+                TextView textview = (TextView) ret.findViewById(R.id.current_version);
+                ImageView imageView = (ImageView) ret.findViewById(R.id.image);
+                CurrentAppInfoObserver cu = new CurrentAppInfoObserver(
+                        mContext,cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_APPNAME)),
+                        cursor.getString(cursor.getColumnIndex(Constant.COLUMNS_PKGNAME)),
+                        Arrays.asList(textview, imageView));
+                ret.setTag(cu);
             }
             return ret;
         }

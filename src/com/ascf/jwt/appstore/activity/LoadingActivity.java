@@ -15,7 +15,6 @@ import com.ascf.jwt.appstore.dirparser.AccountProvider;
 import com.ascf.jwt.appstore.dirparser.DirXMLParse;
 import com.ascf.jwt.appstore.dirparser.Directory;
 import com.ascf.jwt.appstore.dirparser.INotifyComplete;
-import com.ascf.jwt.appstore.dirparser.ServiceForAccount;
 
 public class LoadingActivity extends Activity implements INotifyComplete {
 
@@ -65,8 +64,11 @@ public class LoadingActivity extends Activity implements INotifyComplete {
         mProgressDialog.setMessage(getResources().getString(R.string.load_app_data));
         stIntent.putExtra("mydata", dr);
         if (null == dr) Log.i("jibangguo:parse directory xml error", "");
-        startActivity(stIntent);
+        
+        setResult(RESULT_OK, stIntent);
+        
         finish();
+        startActivity(stIntent);
     }
 
     public void onStart() {

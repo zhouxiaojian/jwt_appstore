@@ -8,9 +8,9 @@ public class Constant {
 
     public final static String GO_ON_AFTER_PARSEDIRXML = "diretory_xml";
 
-	public final static String DEFAULT_IP = "10.186.4.40";
+	public final static String DEFAULT_IP = "beforehand1508.eicp.net";
 
-	public final static String DEFAULT_PORT = "10000";
+	public final static String DEFAULT_PORT = "58800";
 
 	public final static String KEY_IP = "server";
 

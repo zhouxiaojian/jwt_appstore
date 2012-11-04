@@ -39,5 +39,6 @@
     <string name="status_update">Upgrade</string>
     <string name="status_notinstall">Not Installed</string>
     <string name="status_pause">Pause</string>
-
+    <string name="current_ver_tag">Current:</string>
+    <string name="no_install_tag">Not Installed</string>
 </resources>

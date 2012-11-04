@@ -27,7 +27,8 @@
     <bind app:from="/icon_image" app:to="@id/image" app:as="com.ascf.jwt.appstore.UrlImageBinder"/>
     <bind app:from="/description" app:to="@id/description" app:as="string" />
     <bind app:from="/apkurl" app:to="@id/download_button" app:as="com.ascf.jwt.appstore.ButtonBinder" />
-    <bind app:from="/pubDate" app:to="@id/date" app:as="string" >
-    <transform app:withExpression="Published on {/pubDate}." />
+    <bind app:from="/version_name" app:to="@id/latest_version" app:as="string">
+        <transform app:withExpression="最新版本：{/version_name}" />
     </bind>
+
 </cursor-adapter>

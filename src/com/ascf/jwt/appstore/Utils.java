@@ -2,6 +2,7 @@ package com.ascf.jwt.appstore;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,10 +12,17 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
+import com.ascf.jwt.appstore.action.DownloadSaver;
+import com.ascf.jwt.appstore.action.InstallCompleteReceiver;
+import com.ascf.jwt.appstore.action.StatusObserver;
 import com.ascf.jwt.appstore.dirparser.ServiceForAccount;
 
 public class Utils {
@@ -24,6 +32,50 @@ public class Utils {
 
     private Utils(){
         
+    }
+
+    public static BroadcastReceiver registeInstallReceiver(Context ctx, String pkg, StatusObserver observer) {
+        InstallCompleteReceiver receiver = new InstallCompleteReceiver(pkg, observer);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(InstallCompleteReceiver.INSTALL_INTENT);
+        intentFilter.addAction(InstallCompleteReceiver.UNINSTALL_INTENT);
+        intentFilter.addAction(InstallCompleteReceiver.REPLACED_INTENT);
+        intentFilter.addDataScheme("package");
+        ctx.registerReceiver(receiver, intentFilter);
+        return receiver;
+    }
+
+    public static void unRegisteInstallReceiver(Context ctx, BroadcastReceiver broadcast) {
+        ctx.unregisterReceiver(broadcast);
+    }
+
+    public static void putIsDownloaded(Context ctx, String appname, boolean down){
+        DownloadSaver saver = DownloadSaver.getIntance();
+        saver.setContext(ctx);
+        saver.putAppIsDownload(appname, down);
+    }
+
+    public static boolean getIsDownloaded(Context ctx, String appname){
+        DownloadSaver saver = DownloadSaver.getIntance();
+        saver.setContext(ctx);
+        return saver.getAppIsDownload(appname);
+    }
+
+    public static String getApkPathByApkName(String apname){
+        return Constant.DOWNLOAD_FILE_DIR + apname + Constant.APK_SUFFIX;
+    }
+
+    public static void install(Context ctx, String filepath){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(filepath)),
+                "application/vnd.android.package-archive");
+        ctx.startActivity(intent);
+    }
+
+    public static void uninstall(Context ctx, String packagename){
+        Uri packageURI = Uri.parse("package:" + packagename);     
+        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);     
+        ctx.startActivity(uninstallIntent); 
     }
 
     public static String getServerInfo(Context ctx, String tag){

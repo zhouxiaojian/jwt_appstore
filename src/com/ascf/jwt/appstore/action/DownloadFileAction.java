@@ -15,17 +15,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ascf.jwt.appstore.Constant;
+import com.ascf.jwt.appstore.Utils;
 
 public class DownloadFileAction implements IClickBtnAction {
 
     public static final String TAG = "DownloadFileTask";
     private String mAppname = "";
     private String mUrl = "";
-    private IDownloadObserver mCallBack;
+    private StatusObserver mCallBack;
     private Context mCtx;
     private DownloadOneAppTask mDownloadTask;
 
-    public DownloadFileAction(Context ctx, String appname, String url, IDownloadObserver callback){
+    public DownloadFileAction(Context ctx, String appname, String url, StatusObserver callback){
         this.mAppname = appname;
         this.mUrl = url;
         this.mCallBack = callback;
@@ -48,11 +49,11 @@ public class DownloadFileAction implements IClickBtnAction {
 
 class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
 
-    private IDownloadObserver callbk = null;
+    private StatusObserver callbk = null;
     private Context mCtx = null;
     private boolean forceStop = false;
 
-    public DownloadOneAppTask(Context ctx, IDownloadObserver c) {
+    public DownloadOneAppTask(Context ctx, StatusObserver c) {
         this.callbk = c;
         this.mCtx = ctx;
     }
@@ -85,20 +86,23 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
                 boolean f = dir.mkdirs();
                 Log.i("DownloadFileTask", "Create new dir:" + f);
             }
-            file = new File(Constant.DOWNLOAD_FILE_DIR + appname + Constant.APK_SUFFIX);
+            file = new File(Utils.getApkPathByApkName(appname));
             Log.i(DownloadFileAction.TAG, "save to file:" + file.getAbsolutePath());
             long skipSize = 0;
-            if (!file.exists()){
-                boolean tf = file.createNewFile();
-                Log.i("", "Create new file:" + tf);
-            }else {
-                realSize = file.length();
-                DownloadFileSizeSaver.getInstance().checkDownloadFileSize(appname, realSize);
-                skipSize = DownloadFileSizeSaver.getInstance().getDownloadProgressSize(appname);
-            }
+            //DownloadFileSizeSaver saver = DownloadFileSizeSaver.getInstance();
+//            if (!file.exists() && saver.getDownloadProgressSize(appname) ==0){
+//                // file not exist, also not download
+//                boolean tf = file.createNewFile();
+//                Log.i("", "Create new file:" + tf);
+//            }else if (file.exists() && saver.getDownloadProgressSize(appname) > 0){
+//                // download, but not completed.
+//                realSize = file.length();
+//                saver.checkDownloadFileSize(appname, realSize);
+//                skipSize = saver.getDownloadProgressSize(appname);
+//            }
 
             // Constructs a new BufferedOutputStream, providing out with size bytes of buffer.
-            output = new BufferedOutputStream(new FileOutputStream(file), Constant.DOWNLOAD_OUTPUT_BUFFER_SIZE);
+            output = new BufferedOutputStream(new FileOutputStream(file, false), Constant.DOWNLOAD_OUTPUT_BUFFER_SIZE);
             byte[] buffer = new byte[Constant.DOWNLOAD_BUFFER_SIZE];
 
             Log.i(DownloadFileAction.TAG, "total size:" + totalC);
@@ -107,12 +111,13 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
                 int i = istream.read(buffer);
                 if (i == -1) {
                     DownloadFileSizeSaver.getInstance().delete(appname);
+                    Utils.putIsDownloaded(this.mCtx, appname, true);
                     publishProgress(100);
                     break;
                 }
                 output.write(buffer, 0, i);
                 realSize += i;
-                DownloadFileSizeSaver.getInstance().putDownloadProgressSize(appname, realSize);
+                //DownloadFileSizeSaver.getInstance().putDownloadProgressSize(appname, realSize);
                 int per = (int)((float)realSize/totalC * 100);
 
 //                Log.i(DownloadFileAction.TAG, "downloaded size=" + realSize + ", downloaded percent:" + per);
@@ -149,16 +154,8 @@ class DownloadOneAppTask extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String result) {
         if (!forceStop){
             Log.i("start install apk", ":" + result);
-            installApk(result);
+            Utils.install(mCtx, result);
         }
-    }
-
-    private void installApk(String filepath) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(filepath)),
-                "application/vnd.android.package-archive");
-        
-        mCtx.startActivity(intent);
     }
 
 }

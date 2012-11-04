@@ -37,6 +37,7 @@ import com.ascf.jwt.appstore.XmlDocumentProvider;
 public class AppStoreMainActivity extends ListActivity {
     //private static final String FEED_URI = "http://10.186.0.239/config_server.xml";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,4 +53,17 @@ public class AppStoreMainActivity extends ListActivity {
 
         getListView().setOnItemClickListener(new UrlIntentListener());
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        
+    }
+
+    @Override
+    public void onStop(){
+        //this.unregisterReceiver(mReveiver);
+        super.onStop();
+    }
+
 }

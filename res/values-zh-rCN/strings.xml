@@ -35,10 +35,11 @@
     <string name="check_user_rights">验证用户权限</string>
     <string name="user_directory">警务应用程序目录</string>
     <string name="status_download">下载</string>
-    <string name="status_installed">已安装</string>
+    <string name="status_installed">卸载</string>
     <string name="status_update">升级</string>
-    <string name="status_notinstall">未安装</string>
+    <string name="status_notinstall">安装</string>
     <string name="status_pause">暂停</string>
-    
+    <string name="current_ver_tag">当前版本：</string>
+    <string name="no_install_tag">未安装</string>
 
 </resources>

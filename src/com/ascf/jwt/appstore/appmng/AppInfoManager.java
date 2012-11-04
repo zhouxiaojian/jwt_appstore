@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.ascf.jwt.appstore.Constant;
 import com.ascf.jwt.appstore.R;
-import com.ascf.jwt.appstore.action.DownloadFileSizeSaver;
+import com.ascf.jwt.appstore.Utils;
 
 public class AppInfoManager {
 
@@ -40,6 +40,21 @@ public class AppInfoManager {
             return false;
         }
         return false;
+    }
+
+    public String getAppVersionName(String pkg){
+        String result = mContext.getResources().getString( R.string.current_ver_tag)
+                + mContext.getResources().getString(R.string.no_install_tag);
+        try {
+            PackageInfo info = mPm.getPackageInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES);
+            if (info != null){
+                result = mContext.getResources().getString(
+                        R.string.current_ver_tag) + info.versionName;
+           }
+        }catch (Exception e){
+            return result;
+        }
+        return result;
     }
 
     /**
@@ -70,10 +85,10 @@ public class AppInfoManager {
             }
         } catch (PackageManager.NameNotFoundException es) {
             isInstall = false;
-            Log.e(TAG, "package name not found.", es);
+            Log.e(TAG, "package name not found.");
         } catch (Exception e) {
             isInstall = false;
-            Log.e(TAG, "query app exception.", e);
+            Log.e(TAG, "query app exception.");
         }
 
         if (!isInstall ){
@@ -88,22 +103,28 @@ public class AppInfoManager {
      * @param appname
      * @return
      */
-    private int getApkIsDownload(String appname){
-        String filepath = Constant.DOWNLOAD_FILE_DIR + appname + Constant.APK_SUFFIX;
+    private int getApkIsDownload(String appname) {
+        String filepath = Constant.DOWNLOAD_FILE_DIR + appname
+                + Constant.APK_SUFFIX;
         int result = Constant.STATUS_UNKNOWN;
         File file = new File(filepath);
-        if (file.exists()){
-            // TODO 文件已经下载了，需要继续check是否完全下载了
-            DownloadFileSizeSaver saver = DownloadFileSizeSaver.getInstance();
-            long downloadsize = saver.getDownloadProgressSize(appname);
-            if (downloadsize == 0){
-                // downloaded
-                result = Constant.STATUS_UNINSTALLED;
-            }else {
-                // download not complete
-                result = Constant.STATUS_DOWNLOADED_UNCOMPLETED;
-            }
-        }else {
+        boolean downloaded = Utils.getIsDownloaded(mContext, appname);
+        if (file.exists() && downloaded) {
+            result = Constant.STATUS_UNINSTALLED;
+            // // TODO 文件已经下载了，需要继续check是否完全下载了
+            // DownloadFileSizeSaver saver =
+            // DownloadFileSizeSaver.getInstance();
+            // long downloadsize = saver.getDownloadProgressSize(appname);
+            // if (downloaded == 0){
+            // // downloaded
+            // result = Constant.STATUS_UNINSTALLED;
+            // }else {
+            // // download not complete
+            // result = Constant.STATUS_DOWNLOADED_UNCOMPLETED;
+            // }
+            // if (downloaded){
+            // }
+        } else {
             // undownload
             result = Constant.STATUS_NOTDOWNLOAD;
         }
@@ -140,11 +161,11 @@ public class AppInfoManager {
     public Drawable getAppIcon(String pkg){
         try {
             Drawable draw = mPm.getApplicationIcon(pkg);
-
             return draw;
         }catch (NameNotFoundException e){
             Log.e(TAG, "package:" + pkg + " not found.", e);
-            return mContext.getResources().getDrawable(R.drawable.ic_default_picture);
+            //return mContext.getResources().getDrawable(R.drawable.ic_default_picture);
+            return null;
         }
     }
 

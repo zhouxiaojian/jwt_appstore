@@ -43,6 +43,10 @@ public class DirectoryAdapter extends BaseAdapter {
 		return position;
 	}
 
+	public boolean areAllItemsEnabled (){
+	    return false;
+	}
+
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(position > mItems.size()) {
 			return null;
@@ -51,6 +55,7 @@ public class DirectoryAdapter extends BaseAdapter {
 			convertView = mInflater.inflate(R.layout.list_view_item, null);
 		}
 		TextView textV = (TextView) convertView.findViewById(R.id.title);
+		textV.setEnabled(mItems.get(position).ismIsEnable());
 		textV.setText(mItems.get(position).getmDisplayname());
 		return convertView;
 	}
